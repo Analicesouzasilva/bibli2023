@@ -31,27 +31,32 @@ public class LivroController {
 
     @RequestMapping("/list")
     public String list(Model model){
-        model.addAttribute("autores", autorRepo.findAll());
-        return "/autor/list";
+        model.addAttribute(attributeName:"livros", livroRepo.findAll());
+        return "list.jsp";
   
     
 }
 
 @RequestMapping("/insert")
 
-public String insert(){
-    return "/autor/insert";
+public String insert(Model model){
+    model.addAttribute(attributeName:"generos", generoRepo.findAll());
+    model.addAttribute(attributeName:"autores", autorRepo.findAll());
+    return "insert.jsp";
 }
 
 
 @RequestMapping(value ="/insert", method = RequestMethod.POST)
-public String insert(@RequestParam("nome") String nome){
-    Autor autor =new Autor();
-    autor.setNome(nome);
+public String insert(@RequestParam("titulo") String titulo),
+@RequestMapping("genero") int generoId,
+@RequestMapping("autor") int autorId{
+    Livro livro =new Livro();
+    livro.setTitulo(titulo);
+    livro.setGenero(generoRepo.findById(generoId).get());
+    livro.setAutor(autorRep.findById(autorId).get());
+    livroRepo.save(livro);
 
-    autorRepo.save(autor);
-
-    return "redirect:/autor/list";
+    return "redirect:/livro/list";
 }
 
 
